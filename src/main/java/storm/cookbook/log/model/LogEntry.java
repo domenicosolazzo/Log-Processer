@@ -66,7 +66,6 @@ public class LogEntry {
                     return temp;
             } catch (ParseException e) {}
         }
-        LOG.error("Could not parse timestamp for log");
         return null;
     }
 

@@ -1,7 +1,5 @@
 package storm.cookbook.log.model;
 
-import javax.print.attribute.standard.Severity;
-
 /**
  * User: domenicosolazzo
  */
