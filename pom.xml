@@ -4,11 +4,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>storm.cookbook</groupId>
-  <artifactId>log-processer</artifactId>
+  <artifactId>log-processing</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>log-processer</name>
+  <name>log-processing</name>
   <url>https://github.com/domenicosolazzo/Log-Processer</url>
 
 <properties>
