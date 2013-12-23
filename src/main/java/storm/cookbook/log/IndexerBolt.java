@@ -5,10 +5,14 @@ import backtype.storm.task.OutputCollector;
 import backtype.storm.task.TopologyContext;
 import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.topology.base.BaseRichBolt;
+import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
+import backtype.storm.tuple.Values;
+import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.node.Node;
 import org.elasticsearch.node.NodeBuilder;
+import storm.cookbook.log.model.LogEntry;
 
 import java.util.Map;
 import java.util.logging.Logger;
@@ -48,11 +52,29 @@ public class IndexerBolt extends BaseRichBolt{
 
     @Override
     public void execute(Tuple tuple) {
+        LogEntry entry = (LogEntry) tuple.getValueByField(FieldNames.LOG_ENTRY);
+        if (entry == null){
+            LOG.fatal("The entry is null or invalid.");
+            return;
+        }
+        String toBeIndexed = entry.toJSON().toJSONString();
+        IndexResponse response = client.prepareIndex(INDEX_NAME, INDEX_TYPE)
+                .setSource(toBeIndexed)
+                .execute().actionGet();
+        if ( response == null ){
+            LOG.error("Error indexing the tuple: " + tuple.toString());
+        }else if (response.getId() == null){
+            LOG.error("Index id is null. Error indexing the tuple: " + tuple.toString());
+
+        }else{
+            LOG.debug("The tuple has been indexed. " + input.toString());
+            this.collector.emit(new Values( entry, response.getId() ));
+        }
 
     }
 
     @Override
     public void declareOutputFields(OutputFieldsDeclarer outputFieldsDeclarer) {
-
+        outputFieldsDeclarer.declare(new Fields(FieldNames.LOG_ENTRY, FieldNames.LOG_INDEX_ID));
     }
 }
