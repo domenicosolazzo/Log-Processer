@@ -31,7 +31,7 @@ public class LogRulesBolt extends BaseRichBolt{
     public void prepare(Map conf, TopologyContext topologyContext, OutputCollector outputCollector) {
         this.collector = collector;
 
-        KnowledgeBuilder kbuilder = new KnowledgeBuilderFactory().newKnowledgeBuilder();
+        KnowledgeBuilder kbuilder = KnowledgeBuilderFactory.newKnowledgeBuilder();
         kbuilder.add( ResourceFactory.newClassPathResource( "/Syslog.drl",
                 getClass() ), ResourceType.DRL );
         if( kbuilder.hasErrors() ){
