@@ -33,4 +33,8 @@ public class LogTopology {
         conf.put(CassandraBolt.CASSANDRA_KEYSPACE, Conf.LOGGING_KEYSPACE);
 
     }
+
+    public TopologyBuilder getBuilder(){
+        return builder;
+    }
 }
