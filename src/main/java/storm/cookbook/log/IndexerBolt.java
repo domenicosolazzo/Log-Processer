@@ -8,6 +8,7 @@ import backtype.storm.topology.base.BaseRichBolt;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
 import backtype.storm.tuple.Values;
+import org.apache.log4j.Logger;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.node.Node;
@@ -15,7 +16,6 @@ import org.elasticsearch.node.NodeBuilder;
 import storm.cookbook.log.model.LogEntry;
 
 import java.util.Map;
-import java.util.logging.Logger;
 
 /**
  * User: domenicosolazzo
@@ -67,7 +67,7 @@ public class IndexerBolt extends BaseRichBolt{
             LOG.error("Index id is null. Error indexing the tuple: " + tuple.toString());
 
         }else{
-            LOG.debug("The tuple has been indexed. " + input.toString());
+            LOG.debug("The tuple has been indexed. " + tuple.toString());
             this.collector.emit(new Values( entry, response.getId() ));
         }
 

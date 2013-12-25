@@ -7,6 +7,7 @@ import backtype.storm.topology.base.BaseRichBolt;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
 import backtype.storm.tuple.Values;
+import org.apache.log4j.Logger;
 import org.drools.KnowledgeBase;
 import org.drools.KnowledgeBaseFactory;
 import org.drools.builder.KnowledgeBuilder;
@@ -17,7 +18,7 @@ import org.drools.runtime.StatelessKnowledgeSession;
 import storm.cookbook.log.model.LogEntry;
 
 import java.util.Map;
-import java.util.logging.Logger;
+
 
 /**
  * User: domenicosolazzo
@@ -32,8 +33,8 @@ public class LogRulesBolt extends BaseRichBolt{
         this.collector = collector;
 
         KnowledgeBuilder kbuilder = KnowledgeBuilderFactory.newKnowledgeBuilder();
-        kbuilder.add( ResourceFactory.newClassPathResource( "/Syslog.drl",
-                getClass() ), ResourceType.DRL );
+        kbuilder.add(ResourceFactory.newClassPathResource("/Syslog.drl",
+                getClass()), ResourceType.DRL);
         if( kbuilder.hasErrors() ){
             LOG.error(kbuilder.getErrors().toString());
 
