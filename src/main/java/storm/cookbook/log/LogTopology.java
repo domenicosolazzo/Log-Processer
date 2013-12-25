@@ -37,4 +37,8 @@ public class LogTopology {
     public TopologyBuilder getBuilder(){
         return builder;
     }
+
+    public Config getConfig(){
+        return conf;
+    }
 }
