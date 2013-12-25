@@ -2,8 +2,11 @@ package storm.cookbook.log;
 
 import backtype.storm.Config;
 import backtype.storm.LocalCluster;
+import backtype.storm.StormSubmitter;
 import backtype.storm.contrib.cassandra.bolt.CassandraBolt;
 import backtype.storm.contrib.cassandra.bolt.CassandraCounterBatchingBolt;
+import backtype.storm.generated.AlreadyAliveException;
+import backtype.storm.generated.InvalidTopologyException;
 import backtype.storm.topology.TopologyBuilder;
 import backtype.storm.utils.Utils;
 
@@ -65,4 +68,11 @@ public class LogTopology {
         }
     }
 
+    public void runCluster(String name, String redisHost, String cassandraHost)
+            throws AlreadyAliveException, InvalidTopologyException {
+        conf.setNumWorkers(20);
+        conf.put(Conf.REDIS_HOST_KEY, redisHost);
+        conf.put(CassandraBolt.CASSANDRA_HOST,cassandraHost);
+        StormSubmitter.submitTopology(name, conf, builder.createTopology());
+    }
 }
