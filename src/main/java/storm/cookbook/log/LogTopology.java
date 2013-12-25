@@ -41,4 +41,9 @@ public class LogTopology {
     public Config getConfig(){
         return conf;
     }
+    public LocalCluster getLocalCluster(){
+        return cluster;
+    }
+
+
 }
