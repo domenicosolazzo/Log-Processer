@@ -75,4 +75,19 @@ public class LogTopology {
         conf.put(CassandraBolt.CASSANDRA_HOST,cassandraHost);
         StormSubmitter.submitTopology(name, conf, builder.createTopology());
     }
+
+    public static void main(String[] args) throws Exception {
+
+        LogTopology topology = new LogTopology();
+
+        if (args != null && args.length > 1) {
+            topology.runCluster(args[0], args[1], args[2]);
+        } else {
+            if (args != null && args.length == 1)
+                System.out
+                        .println("Running in local mode, redis ip missing for cluster run");
+            topology.runLocal(10000);
+        }
+
+    }
 }
