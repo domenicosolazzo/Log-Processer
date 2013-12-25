@@ -5,6 +5,7 @@ import backtype.storm.LocalCluster;
 import backtype.storm.contrib.cassandra.bolt.CassandraBolt;
 import backtype.storm.contrib.cassandra.bolt.CassandraCounterBatchingBolt;
 import backtype.storm.topology.TopologyBuilder;
+import backtype.storm.utils.Utils;
 
 /**
  * User: domenicosolazzo
@@ -45,5 +46,23 @@ public class LogTopology {
         return cluster;
     }
 
+    public void runLocal(int runTime) {
+        conf.setDebug(true);
+        conf.put(Conf.REDIS_HOST_KEY, "localhost");
+        conf.put(CassandraBolt.CASSANDRA_HOST, "localhost:9171");
+        cluster = new LocalCluster();
+        cluster.submitTopology("test", conf, builder.createTopology());
+        if (runTime > 0) {
+            Utils.sleep(runTime);
+            shutDownLocal();
+        }
+    }
+
+    public void shutDownLocal() {
+        if (cluster != null) {
+            cluster.killTopology("test");
+            cluster.shutdown();
+        }
+    }
 
 }
